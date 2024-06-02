@@ -11,6 +11,8 @@ import {
   TextField,
 } from '@mui/material';
 import { Loading } from './loading';
+import { jsonPlaceholderAPI, hackerrankAPI } from './api/axios';
+import axios from 'axios';
 
 function App() {
   const inputRef = useRef(null);
@@ -24,9 +26,6 @@ function App() {
   });
 
   useEffect(() => {
-    let url = `
-    https://jsonmock.hackerrank.com/api/football_competitions?year=${selectedYear}`;
-
     async function fetchData() {
       /*
       setIsLoading(true);
@@ -43,6 +42,16 @@ function App() {
     }
     fetchData();
 
+    hackerrankAPI
+      .get(`football_competitions?year=${selectedYear}`)
+      .then((result) => console.log(result));
+
+    jsonPlaceholderAPI.get('posts/1').then(console.log);
+    /*
+      axios.get(
+        `https://jsonmock.hackerrank.com/api/football_competitions?year=${selectedYear}`
+      );
+     */
     // inputRef.current.focus();
   }, [selectedYear]);
 
