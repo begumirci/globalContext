@@ -13,16 +13,22 @@ import {
 import { Loading } from './loading';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(2011);
   const inputRef = useRef(null);
+
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(2011);
+  const [game, setGame] = useState({
+    status: 'active', // null | active |passive
+    id: 10,
+  });
 
   useEffect(() => {
     let url = `
     https://jsonmock.hackerrank.com/api/football_competitions?year=${selectedYear}`;
 
     async function fetchData() {
+      /*
       setIsLoading(true);
       fetch(url)
         .then((response) => response.json())
@@ -33,17 +39,18 @@ function App() {
             setIsLoading(false);
           }, 3000)
         );
+      */
     }
     fetchData();
 
-    inputRef.current.focus();
+    // inputRef.current.focus();
   }, [selectedYear]);
 
   return (
     <Container maxWidth='lg'>
       <Box sx={{ flexGrow: 1 }}>
         {isLoading && <Loading />}
-        {!isLoading && (
+        {game.status === null && (
           <Stack gap={5}>
             <FormControl fullWidth>
               <InputLabel id='demo-simple-select-label'>Select Year</InputLabel>
@@ -61,16 +68,16 @@ function App() {
                 ))}
               </Select>
             </FormControl>
-            <Stack direction='column'>
-              <TextField
-                inputRef={inputRef}
-                label='Surname'
-                variant='outlined'
-              />
-            </Stack>
-            <Stack direction='column'>
-              <TextField label='Name' variant='outlined' />
-            </Stack>
+          </Stack>
+        )}
+        {game.status === 'active' && (
+          <Stack direction='column'>
+            <TextField inputRef={inputRef} label='Active' variant='outlined' />
+          </Stack>
+        )}
+        {game.status === 'passive' && (
+          <Stack direction='column'>
+            <TextField label='Passive' variant='outlined' />
           </Stack>
         )}
       </Box>
